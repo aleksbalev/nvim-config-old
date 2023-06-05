@@ -1,16 +1,13 @@
 local lsp = require("lsp-zero")
-local lspconfig = require 'lspconfig'
-local configs = require 'lspconfig/configs'
 
 lsp.preset("recommended")
 
 lsp.ensure_installed({
   'tsserver',
-  'esling',
+  'eslint',
   'angularls',
   'cssls',
   'gopls',
-  'golangci_lint_ls',
   'sqlls',
   'html',
   'jsonls',
@@ -21,23 +18,6 @@ lsp.ensure_installed({
 
 -- Fix Undefined global 'vim'
 lsp.nvim_workspace()
-
--- Golang lsp config
-if not configs.golangcilsp then
- 	configs.golangcilsp = {
-		default_config = {
-			cmd = {'golangci-lint-langserver'},
-			root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
-			init_options = {
-					command = { "golangci-lint", "run", "--enable-all", "--disable", "lll", "--out-format", "json", "--issues-exit-code=1" };
-			}
-		};
-	}
-end
-lspconfig.golangci_lint_ls.setup {
-	filetypes = {'go','gomod'}
-}
--- Golang lsp config
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
@@ -77,6 +57,7 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
   vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
   vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
+  vim.keymap.set("n", "<leader>fm", function() vim.lsp.buf.format({async = flase, timeout_ms = 1000}) end, opts)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
