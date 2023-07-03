@@ -12,6 +12,7 @@ lsp.ensure_installed({
   'html',
   'jsonls',
   'astro',
+  'custom-elements-languageserver',
 
   'rust_analyzer',
 })
